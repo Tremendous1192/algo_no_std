@@ -1,0 +1,25 @@
+[package]
+name = "algo_no_std"
+version = "0.0.0"
+authors = ["Tremendous1192"]
+edition = "2021"
+description = "Some algorithms library. ref: ISBN978-7741-9690-9"
+readme = "README.md"
+repository = "https://github.com/Tremendous1192/algo_no_std"
+license = "MIT OR Apache-2.0"
+keywords = ["algorithm", "no-std"]
+
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+itoa = "1.0.9" # 整数型を文字列に変換する
+heapless = "0.7.16"
+
+[dev-dependencies]
+
+[profile.dev]
+opt-level = 0
+
+[profile.release]
+opt-level = 3
