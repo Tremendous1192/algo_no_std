@@ -75,7 +75,7 @@ fn input_number<R: RangeBounds<usize> + IntoIterator<Item = usize>>(range: R) ->
 
                         //println!("\n使用する石の数: {:?}", (1_usize..=10));
                         //print_typename((1_usize..=10));
-                        if (1_usize..11).contains(&number) {
+                        if range.contains(&number) {
                             // (1_usize..=10) - core::ops::range::Range<usize>
                             return number;
                         } else {
