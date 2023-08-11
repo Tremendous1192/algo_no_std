@@ -68,3 +68,32 @@ pub fn crypt(sentence: &str, key: u32) -> heapless::String<128_usize> {
 
     result
 }
+
+/// え: エジプトの分数 - Egyptian fractions
+/// 任意の分数を分子が1の分数の和で表現する
+pub fn egyptian_fractions(numerator: usize, denominator: usize) -> heapless::String<256_usize> {
+    // 初期化
+    let mut result = heapless::String::<256_usize>::new();
+    let mut m: usize = numerator;
+    let mut n: usize = denominator;
+    let mut q: usize;
+
+    let _ = result.push_str(itoa::Buffer::new().format(m));
+    let _ = result.push_str("/");
+    let _ = result.push_str(itoa::Buffer::new().format(n));
+    let _ = result.push_str(" = ");
+
+    // 反復試行
+    while n % m != 0_usize {
+        q = n / m + 1;
+        let _ = result.push_str("1/");
+        let _ = result.push_str(itoa::Buffer::new().format(q));
+        let _ = result.push_str(" + ");
+        m = m * q - n;
+        n *= q;
+    }
+    let _ = result.push_str("1/");
+    let _ = result.push_str(itoa::Buffer::new().format(n / m));
+
+    result
+}

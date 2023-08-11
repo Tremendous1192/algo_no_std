@@ -1,25 +1,16 @@
 /// え: エジプトの分数 - Egyptian fractions
 /// 任意の分数を分子が1の分数の和で表現する
 fn main() {
-    let range_m = 0_usize..=100;
+    let range_m = 0_usize..=50;
     println!("分子を入力してください。範囲 {:?}: ", range_m);
-    let mut m = input_number(range_m);
+    let m = input_number(range_m);
 
     let range_n = 1_usize..=100;
     println!("分母を入力してください。範囲 {:?}: ", range_n);
-    let mut n = input_number(range_n);
+    let n = input_number(range_n);
 
-    let mut q: usize = 0_usize;
-
-    println!("{}/{} = ", m, n);
-
-    while n % m != 0_usize {
-        q = n / m + 1;
-        print!("1/{} + ", q);
-        m = m * q - n;
-        n *= q;
-    }
-    println!("1/{}", n / m);
+    // 結果
+    println!("{}", algo_no_std::egyptian_fractions(m, n));
 }
 
 // 入力値が引数の範囲内であれば入力値を返す関数。範囲外等の場合入力をやり直す。
