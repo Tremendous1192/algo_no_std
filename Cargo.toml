@@ -1,6 +1,6 @@
 [package]
 name = "algo_no_std"
-version = "0.0.0"
+version = "0.0.1"
 authors = ["Tremendous1192"]
 edition = "2021"
 description = "Some algorithms library. ref: ISBN978-7741-9690-9"
