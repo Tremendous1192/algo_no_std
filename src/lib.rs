@@ -97,3 +97,68 @@ pub fn egyptian_fractions(numerator: usize, denominator: usize) -> heapless::Str
 
     result
 }
+
+/// き: 基数の変換 - radix conversion
+pub fn radix_conversion(
+    d_1: usize,
+    x_1: heapless::Vec<usize, 16>,
+    d_2: usize,
+) -> (heapless::String<128_usize>, heapless::String<128_usize>) {
+    // 初期化
+    let mut result_1 = heapless::String::<128_usize>::new();
+    let mut result_2 = heapless::String::<128_usize>::new();
+
+    // 10進数に変換
+    let mut x_1_10: usize = 0_usize;
+    for i in 0_usize..x_1.len() {
+        x_1_10 += x_1[i] * d_1.pow(i as u32);
+    }
+
+    // 元の進数を文字列に変換する
+    let _ = result_1.push_str("(");
+    let _ = result_1.push_str(itoa::Buffer::new().format(x_1_10));
+    let _ = result_1.push_str(")_{");
+    let _ = result_1.push_str(itoa::Buffer::new().format(d_1));
+    let _ = result_1.push_str("} = ");
+    for i in 0_usize..x_1.len() {
+        let _ = result_1.push_str(" +");
+        let _ = result_1.push_str(itoa::Buffer::new().format(x_1[i]));
+        let _ = result_1.push_str("x");
+        let _ = result_1.push_str(itoa::Buffer::new().format(d_1));
+        let _ = result_1.push_str("^");
+        let _ = result_1.push_str(itoa::Buffer::new().format(i));
+    }
+
+    // 変換後の係数
+    let mut x_2: heapless::Vec<usize, 16> = heapless::Vec::<usize, 16>::new();
+    let mut max: usize = 1_usize;
+    while max <= x_1_10 {
+        max *= d_2;
+        let _ = x_2.push(0_usize);
+    }
+
+    // 変換
+    for i in (0_usize..x_2.len()).rev() {
+        let pow = d_2.pow(i as u32);
+        x_2[i] = x_1_10 % pow;
+        x_1_10 -= x_1_10 / pow;
+    }
+
+    // 変換後の進数を文字列に変換する
+    let _ = result_2.push_str("(");
+    let _ = result_2.push_str(itoa::Buffer::new().format(x_1_10));
+    let _ = result_2.push_str(")_{");
+    let _ = result_2.push_str(itoa::Buffer::new().format(d_2));
+    let _ = result_2.push_str("} = ");
+    for i in 0_usize..x_2.len() {
+        let _ = result_2.push_str(" +");
+        let _ = result_2.push_str(itoa::Buffer::new().format(x_2[i]));
+        let _ = result_2.push_str("x");
+        let _ = result_2.push_str(itoa::Buffer::new().format(d_2));
+        let _ = result_2.push_str("^");
+        let _ = result_2.push_str(itoa::Buffer::new().format(i));
+    }
+
+    (result_1, result_2)
+}
+
