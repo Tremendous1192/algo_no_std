@@ -101,7 +101,7 @@ pub fn egyptian_fractions(numerator: usize, denominator: usize) -> heapless::Str
 /// き: 基数の変換 - radix conversion
 pub fn radix_conversion(
     d_1: usize,
-    x_1: heapless::Vec<usize, 16>,
+    x_1: &heapless::Vec<usize, 16>,
     d_2: usize,
 ) -> (heapless::String<128_usize>, heapless::String<128_usize>) {
     // 初期化
@@ -162,3 +162,53 @@ pub fn radix_conversion(
     (result_1, result_2)
 }
 
+/// き: 逆写像ソート - inverse mapping sort
+/// ベクトルを昇順に並び替える
+pub fn inverse_mapping_sort(a: &heapless::Vec<i8, 256_usize>) -> heapless::Vec<i8, 256_usize> {
+    // 元の配列の最大値と最小値
+    let mut max: i8 = core::i8::MIN;
+    let mut min: i8 = core::i8::MAX;
+    for value in a {
+        if max < *value {
+            max = *value;
+        }
+        if min > *value {
+            min = *value;
+        }
+    }
+
+    // 並び替え後の配列
+    let mut b: heapless::Vec<i8, 256_usize> = heapless::Vec::<i8, 256_usize>::new();
+    for _ in 0_usize..a.len() {
+        let _ = b.push(0_i8);
+    }
+
+    // 序数
+    let mut index: heapless::Vec<i16, 256_usize> = heapless::Vec::<i16, 256_usize>::new();
+    for _ in 0_usize..((max - min + 1_i8) as usize) {
+        let _ = index.push(-1_i16);
+    }
+    // 作業用配列
+    let mut next: heapless::Vec<i16, 256_usize> = heapless::Vec::<i16, 256_usize>::new();
+    for _ in 0_usize..a.len() {
+        let _ = next.push(0_i16);
+    }
+    for i in (0_usize..a.len()).rev() {
+        let x: i8 = a[i] - min;
+        next[i] = index[x as usize];
+        index[x as usize] = i as i16;
+    }
+
+    // ソート
+    let mut j: usize = 0;
+    for x in 0_usize..=((max - min) as usize) {
+        let mut i: i16 = index[x];
+        while i >= 0 && j < a.len() {
+            b[j] = a[i as usize];
+            j += 1_usize;
+            i = next[i as usize];
+        }
+    }
+
+    b
+}
