@@ -163,7 +163,7 @@ pub fn radix_conversion(
 }
 
 /// き: 逆写像ソート - inverse mapping sort
-/// ベクトルを昇順に並び替える
+/// 可変長配列(ベクトル)を昇順に並び替える
 pub fn inverse_mapping_sort(a: &heapless::Vec<i8, 256_usize>) -> heapless::Vec<i8, 256_usize> {
     // 元の配列の最大値と最小値
     let mut max: i8 = core::i8::MIN;
@@ -211,4 +211,45 @@ pub fn inverse_mapping_sort(a: &heapless::Vec<i8, 256_usize>) -> heapless::Vec<i
     }
 
     b
+}
+
+/// く: 組み合わせの数 - number of combination
+/// nCk の計算
+/// * `n` - データの総数 32ビット環境の場合、n <= 16 の範囲外でオーバーフローする
+/// * `k` - 選択するデータ数
+pub fn p60_combination(n: usize, k: usize) -> usize {
+    // 計算量削減
+    let mut k_cal: usize = k;
+    if n - k_cal < k_cal {
+        k_cal = n - k_cal;
+    }
+
+    // 簡単に計算できる内容
+    if k_cal == 0_usize {
+        return 1_usize;
+    } else if k_cal == 1_usize {
+        return n;
+    } else if k_cal > n {
+        return 0;
+    }
+
+    // 係数の初期化
+    // 係数
+    let mut a: heapless::Vec<usize, 32_usize> = heapless::Vec::<usize, 32_usize>::new();
+    for _ in 0_usize..=n {
+        let _ = a.push(0_usize);
+    }
+    for i in 1_usize..k_cal {
+        a[i] = i + 2;
+    }
+
+    // 係数の計算
+    for i in 3_usize..=(n - k_cal + 1_usize) {
+        a[0_usize] = i;
+        for j in 1_usize..k_cal {
+            a[j] += a[j - 1];
+        }
+    }
+
+    a[k_cal - 1]
 }
