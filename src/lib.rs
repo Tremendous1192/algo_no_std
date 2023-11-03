@@ -253,3 +253,34 @@ pub fn p60_combination(n: usize, k: usize) -> usize {
 
     a[k_cal - 1]
 }
+
+/// さ: 最大公約数 - greatest common divisor
+/// * `x`, `y` - 整数
+pub fn greatest_common_divisor(x: usize, y: usize) -> usize {
+    for divisor in (2..=core::cmp::min(x, y)).rev() {
+        if x % divisor == 0_usize && y % divisor == 0_usize {
+            return divisor;
+        }
+    }
+    1_usize
+}
+
+/// し: 順位付け - ranking
+/// 降順で順位付けをする
+pub fn ranking(a: &heapless::Vec<i8, 256_usize>) -> heapless::Vec<usize, 256_usize> {
+    // データを昇順に並び替える
+    let sorted = inverse_mapping_sort(a);
+
+    // 順位を調べる
+    let mut rank = heapless::Vec::<usize, 256_usize>::new();
+    for x in a {
+        for i in (0..sorted.len()).rev() {
+            if *x == sorted[i] {
+                let _ = rank.push(a.len() - i);
+                break;
+            }
+        }
+    }
+
+    rank
+}

@@ -16,6 +16,8 @@ keywords = ["algorithm", "no-std"]
 itoa = "1.0.9" # 整数型を文字列に変換する
 heapless = "0.7.16"
 
+micromath = "2.0.0" # 組込みで使用できる数学処理
+
 [dev-dependencies]
 
 [profile.dev]
